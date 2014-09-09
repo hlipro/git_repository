@@ -50,6 +50,10 @@ git merge dev: merge branch dev to master
 manually solve confilct;
 git log --graph --pretty=oneline --abbrev-commit: see graph branch merge
 
+//no fastforward, git add commit to merge so we can see merge in log//
+git merge --no-ff -m "merge with no-ff" dev
+
+
 
 
 
