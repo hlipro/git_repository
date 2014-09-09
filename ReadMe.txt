@@ -30,7 +30,17 @@ $ ssh-keygen -t rsa -C "youremail@example.com":
                    generate id_rsa id_rsa.pub in Usrs/usrname/.ssh/
                    submit id_rsa.pub in gitpub account setting-ssh key
 
-//
+//remote origin (github repository)//
+Create new repositroy on github;
+git remote add origin git@github.com:hlipro/git_repository.git
+git remote set-url origin https://github.com/hlipro/git_repository
+git push -u origin master
+git push origin master: push local file to server
+git clone git@github.com:hlipro/git_newrespository.git
+
+
+
+
 
 
 
