@@ -45,7 +45,7 @@ git branch: list branch
 git checkout dev: switching to dev]
 git merge dev: merge branch dev to master
 
-
+//git merge conflict ?//
 
 
 
