@@ -61,7 +61,22 @@ git stash: save work into stash
 		  list:
 		  apply stash@{0}: apply specified stash; need stash before applying defferent stash, otherwise merge error
 
+//force deletion of branch//
+git branch -D name: force deletion of branch
 
+//fetch & push branch//
+git remote -v: check remote info
+git push origin master: push master
+				dev : push branch
+git clone git@github.com:hlipro/git_repository.git : fetch master
+git checkout -b dev origin/dev : fetch branch
+git push origin dev : push branch
+git branch --set-upstream dev origin/dev : 
+                     setup link between local and  origin branched
+git pull : pull branch to local and merge with local branch
+		   if conlicted, solve manually
+		   success, then git push origin dev
+		   
 
 
 
