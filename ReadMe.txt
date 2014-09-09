@@ -94,6 +94,9 @@ git push origin :refs/tags/v0.9 : push to delete origin tags
 //ui color//
 git config --global color.ui true
 
+//.gitignore//
+
+
 
 
 
