@@ -40,12 +40,15 @@ git clone git@github.com:hlipro/git_newrespository.git
 
 //branch//
 git checkout -b dev: creating and switching to dev
-git branch: list branch
-[git branch dev: creating dev
-git checkout dev: switching to dev]
+git branch     : list branch
+		    dev: creating dev
+		    -d dev: delete dev
+git checkout dev/master: switching to dev/master
 git merge dev: merge branch dev to master
 
-//git merge conflict ?//
+//git merge conflict//
+manually solve confilct;
+git log --graph --pretty=oneline --abbrev-commit: see graph branch merge
 
 
 
