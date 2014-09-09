@@ -25,4 +25,12 @@ rm test.txt
 git rm test.txt
 git commit -m 'delete test'
 
+//generate key for github//
+$ ssh-keygen -t rsa -C "youremail@example.com": 
+                   generate id_rsa id_rsa.pub in Usrs/usrname/.ssh/
+                   submit id_rsa.pub in gitpub account setting-ssh key
+
 //
+
+
+
