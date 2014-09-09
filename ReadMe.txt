@@ -76,7 +76,25 @@ git branch --set-upstream dev origin/dev :
 git pull : pull branch to local and merge with local branch
 		   if conlicted, solve manually
 		   success, then git push origin dev
-		   
+
+//git tag//
+git tag: show all tags
+		 v0.9 : tag 0.9 to HEAD
+		 v0.9 commit_id: tag 0.9 to commit_id
+		 -a v0.9 -m 'any' commit_id: tag v0.9 to message 'any' on commit_id
+		 -s v0.9 -m 'any' commit_id: add GPG signature to commit_id; require GnuPG installation
+		 -d v0.9: delete tag v0.9
+git show v0.9: show commit with this tag
+git push origin v1.0: push tag v1.0 to origin
+                --tags: push all unsent tags
+//delete origin tag//
+git tag -d v0.9: first delete local tag
+git push origin :refs/tags/v0.9 : push to delete origin tags
+
+//ui color//
+git config --global color.ui true
+
+
 
 
 
