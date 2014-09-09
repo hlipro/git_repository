@@ -50,5 +50,13 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# PyBuilder
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+#PyBuilder
 target/
+
+#Myconfiguration
+git_newrepository
