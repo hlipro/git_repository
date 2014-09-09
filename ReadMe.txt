@@ -59,8 +59,8 @@ git stash: save work into stash
 		  apply: apply stash
 		  drop: drop stash
 		  list:
-		  apply stash@{0}: apply specified stash
-		   
+		  apply stash@{0}: apply specified stash; need stash before applying defferent stash, otherwise merge error
+
 
 
 
