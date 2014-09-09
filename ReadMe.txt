@@ -95,9 +95,37 @@ git push origin :refs/tags/v0.9 : push to delete origin tags
 git config --global color.ui true
 
 //.gitignore//
+direct download
 
+//conmmand alias//
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.ct commit
+git config --global alias.br branch
+git config --global alias.unstage 'reset HEAD'
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+git config --global alias.last 'log -1'
 
+//server config//
+1. setup git
+sudo apt-get install git
+2. create user
+sudo adduser git
+3. collect id_rsa.pub keys into /home/git/.ssh/authorized_keys
+4. initialize git workspace
+sudo git init --bare /path/*.git
+sudo chown -R git:git *.git
+5. forbin shell login: edit /etc/passwd
+from git:x:1001:1001:,,,:/home/git:/bin/bash
+to   git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell
+6. git clone to local
+git clone git@server:/path/*.git
 
+//server keys management//
+Gitosis
+//server acess authorization management//
+Gitolite
 
-
-
+//uitl//
+git cheat sheet
+official site: git-scm.com
