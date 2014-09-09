@@ -38,6 +38,13 @@ git push -u origin master
 git push origin master: push local file to server
 git clone git@github.com:hlipro/git_newrespository.git
 
+//branch//
+git checkout -b dev: creating and switching to dev
+git branch: list branch
+[git branch dev: creating dev
+git checkout dev: switching to dev]
+git merge dev: merge branch dev to master
+
 
 
 
