@@ -53,7 +53,14 @@ git log --graph --pretty=oneline --abbrev-commit: see graph branch merge
 //no fastforward, git add commit to merge so we can see merge in log//
 git merge --no-ff -m "merge with no-ff" dev
 
-
+//git stash//
+git stash: save work into stash
+		  pop: apply and delete stash
+		  apply: apply stash
+		  drop: drop stash
+		  list:
+		  apply stash@{0}: apply specified stash
+		   
 
 
 
