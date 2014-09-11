@@ -30,31 +30,55 @@ if a=='y':
 		print -a
     #print format
     # %s: sting, %d:integer, %f:float, %x:hex
-    'Hi, %s, you have $%d.'%('Michael',100000)
-    '%2d-%02d'%(3,1)
-    '%.2f'%3.1415926
-    #can use %s for numbers
-    'Age:%s. Gender: %s'%(25,True)
-    #unicode
-    u'Hi, %s'%u'Michael'
-    print('growth rate: %d %%'%7)
-    
+	print 'Hi, %s, you have $%d.'%('Michael',100000)
+	print '%2d-%02d'%(3,1)
+	print '%.2f'%3.1415926
+	    #can use %s for numbers
+	print 'Age:%s. Gender: %s'%(25,True)
+	    #unicode
+	print u'Hi, %s'%u'Michael'
+	print('growth rate: %d %%'%7)
+
 a=raw_input('Need see encode module?(y/n): ')
-if a=='y'
+if a=='y':
 	#ASCII conversion
-	ord('A')
-	chr(65)
+	print '%d'%(ord('A'))
+	print '%s'%(chr(65))
 
 	#unicode
 	print u'中文'
-	u'中'
+	print u'中'
 
 	#UTF-8 conversion
-	u'ABC'.encode('utf-8')
-	u'中文'.encode('utf-8')
+	print u'ABC'.encode('utf-8')
+	print u'中文'.encode('utf-8')
 
 	#decode into unicode
-	'abc'.decode('utf-8')
+	print 'abc'.decode('utf-8')
+
+a=raw_input('Need see data stucture module?(y/n): ')
+if a=='y':
+	print 'list'
+	classmates=['Michael','Bob','Tracy']
+	print len(classmates)
+	print classmates[0]
+	print classmates[1]
+	print classmates[2]
+	print classmates[-1]
+	print classmates[-2]
+	print classmates[-3]
+	classmates.append('Adam') #add new element
+	print classmates[-1]
+	classmates.pop() #deletion of last element
+	classmates.pop(1) #deletion of second element
+	print classmates
+	classmates[1]='Sarah'
+	print classmates
+	classmates.append(['asp','php'])
+	print classmates
+	print 'the length is %d'%len(classmates)
+
+
 
 
 
