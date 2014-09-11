@@ -464,6 +464,45 @@ if a=='y':
 	print int2('1000000',base=10) #we can also reset the base
 
 
+a=raw_input('Need see module module?(y/n): ')
+if a=='y':
+	print 'setup library'
+	print 'use shell command: sudo easy_install ***'
+	print 'E.g., sudo pip uninstall PIL ; brew install libjpeg ; sudo easy_install PIL'
+	print 'usefull libs: pip, MySQL-python,', 'numpy (numerical computation),', 'Jinja2 (text)'
+	print 'example of using PIL'
+	import Image
+	im = Image.open('/Users/haoli/Downloads/OneDrive/Pictures/Saved pictures/IMG_1044_JPG.jpg')
+	print im.format, im.size, im.mode
+	im.save('thumb.png')
+	im = Image.open('thumb.png')
+	im.thumbnail((200,100)) #resize, not working for jpeg?
+	im.save('thumb.jpg','JPEG')
+	import os
+	os.remove('thumb.jpg')
+	os.remove('thumb.png')
+	#os.rmdir() : rmdir
+	#shutil.rmtree() : rm directory and all its contents
+	print '\n setup module path'
+	import sys
+	sys.path.append('/Users/haoli/developer/git_repository')
+	# or use PYTHONPATH = '/User/ ...' 
+
+	print '\n__future__: to test current code on future python versions'
+	print 'usage: from __future__ import unicode_literals (or division)'
+	print 'in python 3.*: all \'xxx\' is unicode, rather string.\
+	string is b\'xxx\''
+	print 'in python 2.7: 10/3 = 3 (floor over), 10.0/3 = 3.33333'
+	print 'in python 3.*: 10/3 = 3.33333, 10//3 = 3'
+	
+
+
+
+
+
+
+
+
 
 
 
