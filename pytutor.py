@@ -1070,7 +1070,239 @@ if a=='y':
 	print r"with codecs.open('/path/some.txt','r','gbk') as f:"
 	print '    f.read()'
 
+	print '\n files and directories: os module'
+	print 'import os'
+	import os
+	print 'os.name:',os.name
+	print 'detailed os info:',os.uname()
+	print 'env variables:',os.environ
+	print 'obtain some env variables,e.g., path:',os.getenv('PATH')
+	print 'current abs path:',os.path.abspath('.')
+	print 'setup a new path:',os.path.join(os.path.abspath('.'),'mycompany1')
+	print 'mkdir: mycompany1'
+	os.mkdir(os.path.join(os.path.abspath('.'),'mycompany1'))
+	print 'rmdir: mycompany1'
+	os.rmdir(os.path.join(os.path.abspath('.'),'mycompany1'))
+	print 'path split:',os.path.split(os.path.join(os.path.abspath('.'),'mycompany1'))
+	print 'path split into path & extension:',os.path.splitext(os.path.join(os.path.abspath('.'),'pytutor.py'))
+	print r"file rename: os.rename('some.txt','some.py')"
+	print r"file remove: os.remove('some.py')"
+	print r"file copy: using copyfile() from shutil module"
+	print '\nprint all directories:'
+	print [x for x in os.listdir('.') if os.path.isdir(x)]
+	print '\nprint all .py files:'
+	print [x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py']
+
+	print '\npickling and up-pickling: change var of ram into savable format'
+	print 'try import cPickle as Pickle'
+	try:
+		import cPickle as pickle
+	except importError:
+		import pickle
+	d = dict(name='bob',age=20,score=88)
+	print 'pickling d:',pickle.dumps(d)
+	f = open('dump.txt','wb')
+	pickle.dump(d,f)
+	f.close()
+	f = open('dump.txt','rb')
+	d = pickle.load(f)
+	print 'picking load d:',d
+	f.close()
+	os.remove('dump.txt')
+	print '\npickling files can only be used in python of certain version'
+	print 'better way is to save into standard format, such as JSON, XML'
+	print r"https://docs.python.org/2/library/json.html#json.dumps"
+	import json
+	print 'json dump:',json.dumps(d)
+	f = open('dump.txt','wb')
+	json.dump(d,f)
+	f.close()
+	f = open('dump.txt','rb')
+	d = json.load(f)
+	print 'json load d:',d
+	f.close()
+	os.remove('dump.txt')
+
+	print 'json dump for class object'
+	print 'need to define a func to convert class into dict'
+	print 'example 1:'
+	class Student(object):
+		def __init__(self,name):
+			self.name = name
+	s = Student('bob')
+	def student2dict(std): #convert into dict
+		return { # note: return a dict
+			'name': std.name
+		}
+	print(json.dumps(s,default=student2dict))
+	print 'example 2: use __dict__'
+	print r"print(json.dumps(s, default=lambda obj: obj.__dict__))"
+	print 'json load for class: convert json str into class instance'
 	
+	def dict2student(std):
+		return Student(std['name'])
+
+	print 'use: json.loads(json_str, object_hook=dict2student)'
+
+a=raw_input('Need see Fork() module?(y/n): ')
+if a=='y':
+	import os
+	import sys
+	print 'fork(): cp current process to a child process, return both father and child process'
+	print 'child: returns 0, use getppid() to get father id' 
+	print 'father: returns children pid'
+	print '\nExample: process (%s) start...'%os.getpid()
+	pid = os.fork()
+	if pid ==0:
+		print 'I am child process (%s) and my parent is %s.'%(os.getpid(),os.getppid())
+		sys.exit()
+	else:
+		print 'I (%s) just created a child process (%s).'%(os.getpid(),pid)
+		sys.exit()
+
+a=raw_input('Need see multiprocessing module?(y/n): ')
+if a=='y':
+	print '\nmultiprocessing module'
+	from multiprocessing import Process
+	import os
+	import sys
+
+	#child code
+	def run_proc(name):
+		print 'Run child process %s (%s)...'%(name, os.getpid())
+
+	if __name__ == '__main__':
+		print 'Parent process %s.'%os.getpid()
+		p = Process(target = run_proc, args=('test',)) #create a child process with func and parameters
+		print 'Process will start.'
+		p.start()
+		p.join() # synchronization
+		print 'Process end.'
+
+	print 'use pool to create batch of processes'
+	from multiprocessing import Pool
+	import time,random
+	#import os
+
+	def long_time_task(name):
+		print 'Run task %s (%s)...' %(name,os.getpid())
+		start = time.time()
+		time.sleep(random.random()*3) # to make the func time consuming
+		end = time.time()
+		print 'Task %s runs %0.2f seconds.'%(name,(end-start))
+
+	if __name__ =='__main__':
+		print 'Parent process %s.'% os.getpid()
+		p = Pool() # use Pool class to create instance
+		#p=Pool(5), 5 is the max process number
+		for i in range(5):
+			p.apply_async(long_time_task,args=(i,)) # open a process with func and parameter in tuple
+		print 'Waiting for all subprocesses done...'
+		p.close() # cannot create new process
+		p.join()
+		print 'All processes done'
+
+		print '\ncommunication between processes: Queue, Pipes'
+		from multiprocessing import Process, Queue
+		#import os,time,random
+		def write(q):
+			for value in ['A','B','C']:
+				print 'Put %s to queue...' % value
+				q.put(value)
+				time.sleep(random.random())
+		def read(q):
+			while True:
+				value = q.get(True)
+				print 'Get %s from queue.'%value
+
+		if __name__=='__main__':
+			q = Queue() # create instance in parent proc
+			pw = Process(target=write,args=(q,)) # create a process to wrtie with Queue()=q
+			pr = Process(target=read,args=(q,)) # create a process to read with Queue()=q
+			pw.start()
+			pr.start()
+			pw.join() # wait write proc to end
+			pr.terminate() # read proc is dead loop. need force out
+
+a=raw_input('Need see multithreading module?(y/n): ')
+if a=='y':
+	import time,threading
+	def loop():
+		print 'thread %s is running...'%threading.current_thread().name
+		n = 0
+		while n<5:
+			n=n+1
+			print 'thread %s >>> %s'%(threading.current_thread().name,n)
+			time.sleep(1)
+		print 'thread %s ended.' % threading.current_thread().name
+
+	print 'thread %s is running.' % threading.current_thread().name
+	t = threading.Thread(target=loop,name = 'LoopThread') # target = func, name = thread name
+	t.start()
+	t.join()
+	print 'thread %s ended.' % threading.current_thread().name
+
+	print '\nfor multithreading, since all threads share the same var, we need to lock and unlock var so it can only be changed by one thread a time'
+	print 'funcs: lock = threading.Lock(),lock.acquire(),lock.release()'
+	balance = 0;
+	lock = threading.Lock()
+
+	def change_it(n):
+		global balance
+		balance = balance + n
+		balance = balance - n
+
+	def run_thread(n):
+		for i in range(100000):
+			lock.acquire() # lock the var, only one thread can have the lock
+			try:
+				change_it(n)
+			finally:
+				lock.release() # work done, unlock
+	t1 = threading.Thread(target=run_thread,args=(5,))
+	t2 = threading.Thread(target=run_thread,args=(8,))
+	t1.start()
+	t2.start()
+	t1.join()
+	t2.join()
+	print balance
+	print '\nmultithreading on python can only use one CPU due to GIL'
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
