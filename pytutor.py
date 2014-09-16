@@ -494,50 +494,583 @@ if a=='y':
 	string is b\'xxx\''
 	print 'in python 2.7: 10/3 = 3 (floor over), 10.0/3 = 3.33333'
 	print 'in python 3.*: 10/3 = 3.33333, 10//3 = 3'
+
+a=raw_input('Need see OOP module?(y/n): ')
+if a=='y':
+	class Student(object): 
+	# object is where the class inherits from
+	# keep properties private by adding __
+		def __init__(self, name, score): #initialization
+			self.__name = name
+			self.__score = score
+
+		def print_score(self):
+			print '%s: %s' % (self.__name, self.__score)
+
+		def get_grade(self):
+			if self.__score >= 90:
+				return 'A'
+			elif self.__score>= 60:
+				return 'B'
+			else:
+				return 'C'
+
+		def set_score(self,score):
+			if 0<= score <= 100:
+				self.__score = score
+			else:
+				raise ValueError('bad score')
+
+		def get_score(self):
+			return self.__score
+
+	bart = Student('Bart Simpson', 59)
+	lisa = Student('Lisa Simpson', 87)
+	bart.print_score()
+	lisa.print_score()
+	bart.get_grade()
+	bart.get_score()
+	print 'in class, private function __***__ and private var __** cannot be visited from outside'
+
+	print '\nclass inheritation'
+	class Animal(object):
+		def run(self):
+			print 'Animal is running...'
+
+	class Dog(Animal):
+		def run(self): # function re-def
+			print 'Dog is running...'
+
+	class Cat(Animal):
+		def run(self): # function re-def
+			print 'Cat is running...'
+
+	print 'polymorphism: any function defined for father class can adapt to daughter classes'
+	def run_twice(animal):
+		animal.run()
+		animal.run()
+
+	run_twice(Dog())
+	run_twice(Cat())	
+
+	print '\nobtain object information: type(),isinstance(),dir()'
+	import types
+	print type('abc')==types.StringType
+	print type(u'abs')==types.UnicodeType
+	print type([])==types.ListType
+	print type(int)==type(str)==types.TypeType
+
+	a = Animal()
+	b = Dog()
+	print isinstance(b,Animal)
+	print isinstance(b,Dog)
+	print isinstance(a,Dog)
+	print isinstance(u'a',(str,unicode))
+
+	print dir('ABC') #return all properties and methods
+	print 'ABC'.__len__() # not good to call private function
+
+	class MyObject(object):
+		def __init__(self):
+			self.x=9
+		def power(self):
+			return self.x*self.x
+
+	obj = MyObject()
+	if hasattr(obj,'x'): # is there a property 'x'?
+		print obj.x
+	if not hasattr(obj,'y'):
+		setattr(obj,'y',19)
+	if hasattr(obj,'y'):
+		print getattr(obj,'y')
+	print getattr(obj,'z',404) # 404 not found
+	print hasattr(obj,'power')
+	fn = getattr(obj,'power')
+	print '%d\n'%fn()
+
+a=raw_input('Need see advanced OOP module?(y/n): ')
+if a=='y':
+	print 'We can change property/func of an instance/class'
+	class Student(object):
+		pass
+
+	s = Student()
+	print 'add a property'
+	s.name = 'Michael'
+	print s.name
+	print 'add a function to an instance'
+	from types import MethodType
+	def set_age(self,age):
+		self.age = age
+	s.set_age = MethodType(set_age,s,Student)
+	s.set_age(25)
+	print s.age
+
+	print 'add a function to a class'
+	Student.set_age = MethodType(set_age,None,Student)
+	s1 = Student()
+	s1.set_age(20)
+	print s1.age
+
+	print 'if we want to restrict changes to a class, use __slots__'
+	class Student(object):
+		__slots__ = ('name','age') #use tuple for __slots__
+
+	s = Student()
+	s.name = 'Michael'
+	s.age = 25
+	#s.score = 99 # not allowed to do this
+	print 'for daughter class, it will not inherit __slots__ if not defined'
+	class BlackStudent(Student):
+		pass
+	g = BlackStudent()
+	g.score = 100
+	print g.score # this is allowed since __slots__ not inherited
+
+	class WhiteStudent(Student):
+		__slots__ = ('gender')
+	g = WhiteStudent()
+	#g.score = 100 # not allowed
+
+	print '\n@property decorator converts a getter func into a property'
+	class Student(object):
+
+		@property
+		def score(self):
+		    return self.__score
+		@score.setter
+		def score(self, value):
+			if not isinstance(value,int):
+				raise ValueError('input value must be an integer!')
+			if value <0 or value > 100:
+				raise ValueError('input value must be within [0, 100]')
+			self.__score = value
+
+		@property
+		def lost_pt(self):
+			return 100 - self.__score
+
+	print 'now we can use score as property:'
+	s=Student()
+	s.score = 60 # call score.setter to set score
+	print 'his score is: %d'%s.score # call score getter to get score
+	print 'he lost %d points'%s.lost_pt # this is also a property, and a func
+
+	print '\nmultiple inheritance'
+	class Animal(object):
+		pass
+	class Mammal(Animal):
+		pass
+	class RunnableMixin(object):
+		def run(self):
+			print 'Running...'
+	class Dog(Mammal, RunnableMixin):
+		pass
+
+	print '\nspecial vars/funcs: __slots__,__len__(),__str__,__repr__'
+	class Student(object):
+		def __init__(self,name=None):
+			self.__name = name
+		def __str__(self):
+			return 'Student object (name=%s)'%self.__name
+		__repr__ = __str__
+	print Student('Hao')
+
+	print 'special: __iter__(), next() used in interation;\
+	 __getitem__(),__setitem__(),__delitem__() makes class like list/dict'
+	class Fib(object):
+		def __init__(self):
+			self.a, self.b = 0, 1
+		def __iter__(self):
+			return self
+		def next(self):
+			self.a,self.b=self.b,self.a+self.b
+			if self.a>10:
+				raise StopIteration()
+			return self.a
+		def __getitem__(self,n): # so we can call Fib()[i], i could be slice
+			if isinstance(n,int):
+				a,b = 1,1
+				for x in range(n):
+					a,b = b,a+b
+				return a
+			if isinstance(n,slice):
+				start = n.start
+				stop = n.stop
+				L = []
+				a,b = 1, 1
+				for x in range(stop):
+					a,b = b,a+b
+					if x>= start:
+						L.append(a)
+				return L
+
+	for n in Fib():
+		print n
+
+	for n in range(10):
+		print 'nth element is:', Fib()[n]
+	#	__setitem__(): set value to class as a list/dict
+	#   __delitem__(): del element of class as list/dict
+
+	print 'special: __getattr__(): dynamic return a property that\' not defined in class'
+	class Student(object):
+
+		def __init__(self):
+			self.name = 'Michael'
+
+		def __getattr__(self, attr): # define other properties here
+			if attr=='score':
+				return 99
+			if attr=='age': # can also return a func
+				return lambda: 25
+			raise AttributeError('\'Student\' object has no attribute \'%s\''%attr)
+			# for attr not in this func, still return an error
+
+	s = Student()
+	print s.name
+	print s.score
+	print s.age() #since s.age returns a function, need call s.age() for value
+	print 'dynamic path generation by __getattr__'
+	class Chain(object):
+		def __init__(self,path=''):
+			self._path = path
+		def __getattr__(self,path):
+			return Chain('%s/%s'%(self._path,path))
+		def __str__(self):
+			return self._path
+	print Chain().status.user.timeline.list
+
+	print 'dynamic path with user name'
+	class Chain(object):
+		def __init__(self,path='Users'):
+			self._path = path
+		def users(self,name):
+			return Chain('%s/%s'%(self._path, name))
+		def __getattr__(self,path):
+			return Chain('%s/%s'%(self._path,path))
+		def __str__(self):
+			return self._path
+	print Chain().users('hlipro').developer.git_repository
+
+	print '__call__(): define instance(): e.g. s= Student();\
+	s() defined by s.__call__()'
+	class Student(object):
+		def __init__(self,name='Hao'):
+			self.name = name
+		def __call__(self,name):
+			print 'Hi, %s, my name is %s.'% (name,self.name)
+
+	s = Student('Hao')
+	s('Michael') # call __call__()
+
+	print 'can use callable to see whether object is callable'
+	print 'is Student() (an instance) callable? %s'%callable(Student())
+
+	print '\nuse type() to create dynamic class'	
+	def fn(name='world'):
+		print 'Hello, %s'%name
+	Hello = type('Hello',(object,),dict(hello=fn)) #create a Hello class
+	print type(Hello)
+	h = Hello()
+	print type(h)
+	h.hello()
+
+	print '\nmetaclass -> create class -> create instance'
+	class listMetaclass(type):
+		def __new__(cls,name,bases,attrs):
+			# class object, class name, class father, class func-name dictionary
+			attrs['add'] = lambda self, value: self.append(value)
+			return type.__new__(cls,name,bases,attrs)
+			# return a new class with modified attrs
+
+	class MyList(list):
+		__metaclass__ = listMetaclass
+		# it call listMetaclass.__new__(MyList,'Mylist',(list,),MyList.__attrs__)
+
+	L = MyList()
+	print L.add(1)
+
+	print 'an example of ORM (Object Relational Mapping) that requires dynamic modifying class defination using metaclass'
+	# need ORM support, so marked
+	if False:
+		#define User class
+		class User(Model): # Model func: __getattr__, __setattr__, __init__, save(), __metaclass__
+			id = IntegerField('id') # Field
+			name = StringField('username') #Field
+			email = StringField('email') # Field
+			password = StringField('password') # Field
+		    # call __metaclass__; del id, name, email, password
+		    # create __table__, __mappings__ (dict to save all)
+
+		u = User(id=12345,name='Michael',email='test@orm.org',password='my-pwd')
+
+		u.save() # call save() from Model
+		
+		#now ORM
+		class Field(object):
+			def __init__(self,name,column_type):
+				self.name=name
+				self.column_type=column_type
+			def __str__(self):
+				return '<%s:%s>'%(self.__class__.__name__,self.name)
+
+		class StringField(Field):
+			def __init__(self,name):
+				super(StringField,self).__init__(name,'varchar(100)') #call Field to init
+
+		class IntegerField(Field):
+			def __init__(self,name):
+				super(IntegerField,self).__init__(name,'bigint')
+
+		class ModelMetaclass(type):
+			def __new__(cls,name,bases,attrs):
+				if name=='Model':
+					return type.__new__(cls,name,bases,attrs) # not change Model, only change User
+				mappings = dict() # None dict
+				for k,v in attrs.iteritems(): # original attrs: id, name, email, passwd
+					if isinstance(v,Field): # all attrs are field instances
+						print('Found mapping: %s==>%s'%(k,v)) 
+						mappings[k] = v #save all attrs and values into dict mappings
+				for k in mappings.iterkeys():
+					attrs.pop(k) 
+					#because we have mappings for save, delete old ones
+				attrs['__table__'] = name #create new attrs for User: __table
+				attrs['__mappings__'] = mappings # create __mappings__ for User
+				return type.__new__(cls,name,bases,attrs) # creath a new definition for class User
+
+		class Model(dict): # model is from dict
+			__metaclass__ = ModelMetaclass
+
+			def __init__(self, **kw):
+				super(Model, self).__init__(**kw)
+
+			def __getattr__(self, key): # self is a dict now: can get self[name] instead of self.name
+				try:
+					return self[key]
+				except KeyError:
+					raise AttributeError(r"'Model' object has no attribute '%s'" % key)
+
+			def __setattr__(self, key, value): # can insert key-value into dict self
+				self[key] = value
+
+			def save(self):
+				fields = []
+				params = []
+				args = []
+				for k, v in self.__mappings__.iteritems(): # by metaclass, now attrs are saved in __mappings__
+					fields.append(v.name)
+					params.append('?')
+					args.append(getattr(self, k, None))
+				sql = 'insert into %s (%s) values (%s)' % (self.__table__, ','.join(fields), ','.join(params))
+				# use ',' to separate names in fields and params
+				print('SQL: %s' % sql)
+				print('ARGS: %s' % str(args)) #note args is a list
+
+a=raw_input('Need see error & debug module?(y/n): ')
+if a=='y':
+
+	#https://docs.python.org/2/library/exceptions.html#exception-hierarchy
+	print 'try...except...finally...'
+	print 'first example:'
+	try:
+		print 'try...'
+		r = 10/0
+		print 'result:',r
+	except ValueError,e:#ZeroDivison belongs to ValueError
+		print 'ValueError:',e #e is the error string
+	except ZeroDivisionError,e: #never be executed since ValueError
+		print 'except:',e
+	else:
+		print 'no error!'
+	finally: # finally will always be executed
+		print 'finally...'
+	print 'END\n'
+
+	print '\ndefine DIY error class'
+	class FooError(StandardError):
+		pass
+	def foo(s):
+		n = int(s)
+		if n==0:
+			raise FooError('invalid value: %s'%s)
+		return 10/n
+
+	print 'common error types: ValueError, TypeError, IOError (contained in StandardError)'
+
+	print '\n raise: raise an error for debuggers'
+	try:
+		print 'anything'
+	except StandardError, e:
+		print 'Error' #log
+		raise # raise error info to debugger
+
+	print 'Debug tactic 1:'
+	print 'assert something, \'Error!\', something should be true, otherwise raise an AssertionError'
+	#assert 1 != 1, 'error!'
+	print 'use: python -O ***.py to ignore assert'
+
+	import logging
+	logging.basicConfig(level=logging.INFO)
+	print '\nDebug tactic 2:'
+	print 'use logging to record error files'
+	print 'options: level= debug,info,warning,error'
+
+	print '\nDebug tactic 3:'
+	print 'single step running: pdb'
+	print 'usage: python -m pdb ***.py'
+	print 'enter l: check source code'
+	print 'enter n: run one extra step'
+	print 'enter p: check variable'
+	print 'enter q: quit'
+
+	print '\nDebug tactic 4:'
+	print 'setup check point: pdb.set_trace()'
+	import pdb
+	#pdb.set_trace() 
+	print 'program will pause at pdb.set_trace()'
+	print 'enter c: continue to run'
+	print 'enter p: check variable'
+
+	print '\nDebug tactic 5:'
+	print 'IDE: PyCharm'
+
+	print '\nDebug tactic 6:'
+	print 'Unit Test: write a unit test class'
 	
+	class Dict(dict):
+		
+		def __init__(self,**kw):
+			super(Dict,self).__init__(**kw)
 
+		def __getattr__(self,key):# so we can get self.a
+			try:
+				return self[key]
+			except KeyError:
+				raise AttributeError(r"'Dict' object has no attribute '%s'"%key)
 
+		def __setattr__(self,key,value): #so we can write self.a = b
+			self[key] = value
 
+	import unittest
+	class TestDict(unittest.TestCase):
 
+		def test_init(self):
+			d = Dict(a=1,b='test')
+			
+			self.assertEquals(d.a,1)
+			self.assertEquals(d.b,'test')#check values
 
+			self.assertTrue(isinstance(d,dict))#check type
 
+		def test_key(self):
+			d = Dict()
+			d['key'] = 'value' # check insertion
+			self.assertEquals(d.key,'value')
 
+		def test_attr(self): #check __setattr__()
+			d = Dict()
+			d.key = 'value'
+			self.assertTrue('key' in d)
+			self.assertEquals(d['key'],'value')
 
+		def test_keyerrors(self):
+			d = Dict()
+			with self.assertRaises(KeyError):
+				value = d['empty']
+			# assert there will be keyerror if checking d['empty'] non-existing key
+		def test_attrerror(self):
+			d = Dict()
+			with self.assertRaises(AttributeError):
+				value = d.empty
+		    # assert there will be attributeerror if checking d.empty non-existing attr
 
+		def setUp(self):
+			print 'setUp...'
+		#setup and teardown are executed before and after any test function
+		#can be used to setup preparation, such as open and close database 		
+		def tearDown(self):
+			print 'tearDown...'
 
+	print 'add lines to the end of module for testing:'
+	print r"if __name__ == '__main__':\
+		unittest.main()"
+	print 'or use python -m unittest ****.py'
+	print '\ndoctest'
+	print 'write down notes inside function such as it will be executed when doing python ***.py'
+	print 'notation would be used as a test'
+	print 'example:'
+	print '''
+	class Dict(dict):
+    \''' # here is note start
+    Simple dict but also support access as x.y style.
 
+    >>> d1 = Dict()
+    >>> d1['x'] = 100
+    >>> d1.x
+    100
+    >>> d1.y = 200
+    >>> d1['y']
+    200
+    >>> d2 = Dict(a=1, b=2, c='3')
+    >>> d2.c
+    '3'
+    >>> d2['empty']
+    Traceback (most recent call last):
+        ...
+    KeyError: 'empty'
+    >>> d2.empty
+    Traceback (most recent call last):
+        ...
+    AttributeError: 'Dict' object has no attribute 'empty'
+    \'''
+    def __init__(self, **kw):
+        super(Dict, self).__init__(**kw)
 
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Dict' object has no attribute '%s'" % key)
 
+    def __setattr__(self, key, value):
+        self[key] = value
 
+	if __name__=='__main__':
+	    import doctest
+	    doctest.testmod()'''
 
+a=raw_input('Need see IO module?(y/n): ')
+if a=='y':
+	print 'read/write file'
+	print 'functions: open, f.read(),f.close()'
+	print 'open(): option: r - read, rb - read binary, w-write, wb - write binary'
+	print 'read(size): read in size byte'
+	print 'readline(): read one line'
+	print 'readlines(): read all lines, return a list with each line for each index'
+	print 'write(): write file; must add close or use with'
 
+	print '\nwith: read + close + error_detection'
+	print 'with open(\'/path/somefile.txt\',\'r\') as f:'
+	print '    print f.read()'
 
+	print '\nreadline: for loop'
+	print 'for line in f.readlines():'
+	print '    print(line.strip())'
+	print 'line.strip(): delete \\n at the end of each line'
 
+	print '\nwith: for write'
+	print r"with open('/Users/path/some.txt','w') as f:"
+	print r"    f.write('Hello,world!')"
 
+	print '\nfile-like object: have open(), object have read(), e.g. StringIO: buffer in ram'
 
+	print '\nautomatic code conversion: read file in non-ASCII format; example:'
+	print 'import codecs'
+	print r"with codecs.open('/path/some.txt','r','gbk') as f:"
+	print '    f.read()'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 
 
 
