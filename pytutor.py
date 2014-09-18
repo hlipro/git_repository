@@ -1266,14 +1266,653 @@ if a=='y':
 	t1.join()
 	t2.join()
 	print balance
-	print '\nmultithreading on python can only use one CPU due to GIL'
-
-
-
-
-
-
 	
+	print '\nmultithreading on python can only use one CPU due to GIL'
+	
+	print '\nthreadlocal: p = threading.local(), p is global; \
+	every thread can manage its own property of p'
+	print 'useful in database visit for each thread'
+	p = threading.local()
+	def print_thread():
+		print 'Student %s in thread (%s)'%(p.student,threading.current_thread().name)
+	def process_thread(name):
+		p.student = name
+		print_thread()
+	t1 = threading.Thread(target=process_thread,args=('Michael',),name='Thread 1')
+	t2 = threading.Thread(target=process_thread,args=('Hao',),name='Thread 2')
+	t1.start()
+	t2.start()
+	t1.join()
+	t2.join()
+
+	print 'distributed computing: managers ; (advanced)celery'
+	if False:
+		# taskmanager: register queue; write tasks into queue
+		import random,time,Queue
+		from multiprocessing.managers import BaseManager
+
+		# send task queue
+		task_queue = Queue.Queue()
+		#receiver task queue
+		result_queue = Queue.Queue()
+
+		#inherit from basemanager
+		class QueueManager(BaseManager):
+			pass
+
+		#online register two queue; use BaseManager.register()
+		QueueManager.register('get_task_queue',callable=lambda: task_queue)
+		QueueManager.register('get_result_queue',callable=lambda: result_queue)
+
+		#use port 5000, setup key by creating a BaseManager instance
+		manager = QueueManager(address=('',5000),authkey='abc')
+		#start queue:
+		manager.start()
+		#get queue object
+		task = manager.get_task_queue()
+		result = manager.get_result_queue()
+		#put several tasks
+		for i in range(3):
+			n = random.randint(0,10000)
+			print 'Put task %d...'%n
+			task.put(n)
+
+		print 'Try get results...'
+		for i in range(3):
+			r = result.get(timeout=10)
+			print 'Result: %s' %r
+		#shut down 
+		manager.shutdown()
+		# task worker running on other computers
+	if False:
+		import time,sys,Queue
+		from multiprocessing.managers import BaseManager
+
+		#create QueueManager
+		class QueueManager(BaseManager):
+			pass
+
+		#register
+		QueueManager.register('get_task_queue')
+		QueueManager.register('get_result_queue')
+		#setup server
+		server_addr = '127.0.0.1'
+		print 'connect to server %s...'%server_addr
+
+		#setup manager
+		m = QueueManager(address=(server_addr,5000),authkey='abc')
+		#connect to internet
+		m.connect()
+		#obtain Queue object:
+		task = m.get_task_queue()
+		result = m.get_result_queue()
+		#get data from task, and send them by result
+		for i in range(3):
+			try:
+				n = task.get(timeout=1)
+				print 'run task %d * %d...' % (n,n)
+				r = '%d * %d = %d' %(n,n,n*n)
+				time.sleep(1)
+				result.put(r)
+			except Queue.Empty:
+				print 'task queue is empty'
+
+		print 'worker exit.'
+
+a=raw_input('Need see regualr expression module?(y/n): ')
+if a=='y':
+	print r'''use RE (regular expression) for validating string: re module
+	meaning: \ d : (no space) one number; e.g., 00\ d: for '007'
+		\ w : one number or alphabet; e.g., \ w \ w \ d : for 'py3'
+		.   : any char; e.g., 'py.' : for 'pyc'
+		*   : any number of char, including 0 ; 
+		+   : at least one char
+		?   : zero or one char
+		{n} : n chars ; e.g., \ d {3} : three numbers such as '010'
+		{n,m}: n - m chars ; e.g., \ d {3,8} : such as '1234567'
+		\ s : space or tab ; e.g., \ s + : at least one space
+		     E.g., \ d {3} \ s + \ d {3,8} : '010   4567899'
+		[ ] : range of selections; e.g., [ 0 - 9 a - z A - Z \ _ ] for one number or alphabet or _
+			[ 0 - 9 a - z A - Z \ _ ] * for any number of chars selected from [ ]
+		[ A | B] : A or B ; e.g., [ P | p ] ython : 'Python' or 'python'
+		^    : start of line ; ^ \ d : use number to start a line
+		$    : end of line ; \ d $ : use number to end a line
+	'''
+	import re
+
+	test = r'^\d{3}\-\d{3,8}$'
+	if re.match(test,'010-123456'):
+		print 'ok'
+	else:
+		print 'failed'
+
+	print '\ncan use re to split strings'
+	print re.split(r'\s+','a b   c')
+	print re.split(r'[\s\,]+', ' a  b,c ,,d , e')
+	print re.split(r'[\s\,\;]+', 'a,b,; c d')
+
+	print '\ngrou: use () to extract string'
+	print  r'e.g., ^(\d{3})-(\d{3,8})$'
+	m = re.match(r'^(\d{3})-(\d{3,8})$','010-12345')
+	print m.group(0),m.group(1),m.group(2)
+	
+	print 'split time; extract Hour, minute, second'
+	t = '19:05:30'
+	m = re.match(r'^(0[0-9]|1[0-9]|2[0-3]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])$', t)
+	print m.groups()
+
+	print '\nRE use greedy matching'
+	print re.match(r'^(\d+)(0*)$','102300').groups()
+	print 'add ? to avoid greedy'
+	print re.match(r'^(\d+?)(0*)$','102300').groups()
+
+	print '\npre-compile RE'
+	re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$')
+	print re_telephone.match('010-12345').groups()
+
+
+a=raw_input('Need see internal modules module?(y/n): ')
+if a=='y':
+	print 'base64: encode a binary data with string txt using 64 elemental chars'
+	print r'3 bytes -> 4 bytes; leftover 1 or 2 byte combined with \x00'
+	print 'can display in web and email'
+	import base64
+	print base64.b64encode(r'binary\x00string')
+	# base64.b64decode('erefge')
+	print 'use urlsafe_b64encode for URL'
+	print base64.urlsafe_b64encode('i\xb7\x1d\xfb\xef\xff')
+	print 'also get rid of ='
+	print 'when decoding, add enough = , so the length in byte is multiple of 4'
+	print 'base64 often used in URL, cookie, small binary data delivery of web'
+
+	print '\nstruct: conversion between string and binary'
+	import struct
+	print struct.pack('>I',10240099) # >: big-endian (<: little endien); I: 4 bytes unsigned integer
+	print struct.unpack('>IH','\xf0\xf0\xf0\xf0\x80\x80') #convert str to I: 4 bytes unsigned interger and H: two bytes unsigned integer
+	#https://docs.python.org/2/library/struct.html#format-characters
+
+	print '\nhashlib: compute MD5, SHA1'
+	import hashlib
+	md5 = hashlib.md5()
+	md5.update('how to use md5 in python hashlib?')
+	print md5.hexdigest()
+	sha1 = hashlib.sha1()
+	sha1.update('how to use sha1 in')
+	sha1.update('python hashlib?')
+	print sha1.hexdigest()
+	print 'use: save passwords in the form of digest; safety'
+	print 'salt: complexing simple password & distinguishing same passwds'
+	print r"salted passwd = password+username+'the-salt'"
+
+	print '\nXML: DOM and SAX'
+	print 'DOM: read all XML into ram'
+	print 'SAX: read XML node by node; need to resolve event'
+	print 'usually use SAX, need start_element, end_element, char_data'
+	
+	from xml.parsers.expat import ParserCreate
+
+	class DefaultSaxHandler(object):
+	    def start_element(self, name, attrs):
+	        print('sax:start_element: %s, attrs: %s' % (name, str(attrs)))
+
+	    def end_element(self, name):
+	        print('sax:end_element: %s' % name)
+
+	    def char_data(self, text):
+	        print('sax:char_data: %s' % text)
+
+	xml = r'''<?xml version="1.0"?>
+	<ol>
+	    <li><a href="/python">Python</a></li>
+	    <li><a href="/ruby">Ruby</a></li>
+	</ol>
+	'''
+	handler = DefaultSaxHandler()
+	parser = ParserCreate()
+	parser.returns_unicode = True
+	parser.StartElementHandler = handler.start_element
+	parser.EndElementHandler = handler.end_element
+	parser.CharacterDataHandler = handler.char_data
+	parser.Parse(xml)
+
+	print '\nhtml: decode'
+	from HTMLParser import HTMLParser
+	from htmlentitydefs import name2codepoint
+
+	class MyHTMLParser(HTMLParser):
+
+	    def handle_starttag(self, tag, attrs):
+	        print('<%s>' % tag)
+
+	    def handle_endtag(self, tag):
+	        print('</%s>' % tag)
+
+	    def handle_startendtag(self, tag, attrs):
+	        print('<%s/>' % tag)
+
+	    def handle_data(self, data):
+	        print('data')
+
+	    def handle_comment(self, data):
+	        print('<!-- -->')
+
+	    def handle_entityref(self, name):
+	        print('&%s;' % name)
+
+	    def handle_charref(self, name):
+	        print('&#%s;' % name)
+
+	parser = MyHTMLParser()
+	parser.feed('<html><head></head><body><p>Some <a href=\"#\">html</a> tutorial...<br>END</p></body></html>')
+
+a=raw_input('Need see PIL module?(y/n): ')
+if a=='y':
+	# sudo apt-get install python-imaging #ubuntu
+	# sudo easy_install PIL
+	import Image, ImageFilter
+	if False:
+		im = Image.open('/Users/michael/test.jpg')
+		w , h =im.size
+		#resize
+		im.thumbnail(w//2,h//2)
+		im.save('/Users/michael/thumbnail.jpg')
+		#blur
+		im2 = im.filter(ImageFilter.BLUR)
+
+		print '\ngenerate alphabet validation image:'
+		import Image,ImageDraw,ImageFont,ImageFilter
+		import random
+		#random char
+		def rndChar():
+			return chr(random.randint(65,90))
+		#random color1
+		def rndColor():
+			return (random.randint(64,255),random.randint(64,255),random.randint(64,255))
+		#random color2
+		def rndColor2():
+			return (random.randint(32,127),random.randint(32,127),random.randint(32,127))
+		#240*60:
+		width = 60*4
+		height = 60
+		image = Image.new('RGB',(width,height),(255,255,255))
+		#create Font object:
+		font = ImageFont.truetype('Arial.ttf',36) #maybe '/Library/Fonts/Arial.ttf'
+		#create draw object:
+		draw = ImageDraw.Draw(image)
+
+		for x in range(width):
+			for y in range(height):
+				draw.point((x,y),fill=rndColor())
+		for t in range(4):
+			draw.text((60*t+10,10),rndChar(),font=font,fill=rndColor2())
+		#blur
+		image = image.filter(ImageFilter.BLUR)
+		image.save('code.jpg','jpeg')
+
+a=raw_input('Need see GUI module?(y/n): ')
+if a=='y':
+	print 'Tkinter'
+	from Tkinter import *
+	import tkMessageBox
+	class Application(Frame):
+		def __init__(self,master=None):
+			Frame.__init__(self,master)
+			self.pack()
+			self.createWidgets()
+		def createWidgets(self):
+			self.helloLabel = Label(self,text='Hello,world!')
+			self.helloLabel.pack()
+			self.quitButton = Button(self,text='Quit',command=self.quit)
+			#if button is clicked, command will be executed
+			self.quitButton.pack()
+			self.nameInput = Entry(self) 
+			#input
+			self.nameInput.pack()
+			self.alertButton = Button(self,text='Hello',command = self.hello)
+			self.alertButton.pack()
+		def hello(self):
+			name = self.nameInput.get() or 'world'
+			tkMessageBox.showinfo('Message','Hello,%s'%name)			
+		#Frame -> Widgets (button,label...) 
+		# use pack() to add Widget into frame; grid() is advanced 
+	app = Application()
+	app.master.title('Hello World') #window title
+	app.mainloop()
+
+a=raw_input('Need see TCP/UDP module?(y/n): ')
+if a=='y':
+	print 'TCP connect: create a Sccket (create a link) on TCP'
+	import socket
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	#AF_INET: IPv4; AF_INET6: IPv6
+	#SOCK_STREAM: TCP stream
+	s.connect(('www.sina.com.cn',80))
+	#input is a tuple!
+	#standard WEB port 80
+	s.send('GET / HTTP/1.1\r\nHost: www.sina.com.cn\r\nConnection: close\r\n\r\n')
+	#format: HTTP standard
+	buffer = []
+	while True:
+		d = s.recv(1024) #1k byte
+		if d:
+			buffer.append(d)
+		else:
+			break
+	data = ''.join(buffer)
+	s.close()#close socket
+	header, html = data.split('\r\n\r\n',1)
+	print header
+	with open('sina.html','wb') as f:
+		f.write(html)	
+
+	print '\nserver'
+	import threading
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)	
+
+	#bind port and address of server
+	s.bind(('127.0.0.1',9999))
+	s.listen(5) # 5 is the max number of waiting link
+	print 'Waiting for connection...'
+	if False:
+		while True:
+			sock,addr = s.accept() #accept link from clients
+			t = threading.Thread(target=tcplink,args=(sock,addr))
+			#for any new link, create a new thread
+			t.start()
+	else:
+		s.close() 
+
+	def tcplink(sock, addr):
+	    print 'Accept new connection from %s:%s...' % addr
+	    sock.send('Welcome!')
+	    while True:
+	        data = sock.recv(1024)
+	        time.sleep(1)
+	        if data == 'exit' or not data:
+	            break
+	        sock.send('Hello, %s!' % data)
+	    sock.close()
+	    print 'Connection from %s:%s closed.' % addr
+	
+	if False: # client code
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		# 建立连接:
+		s.connect(('127.0.0.1', 9999))
+		# 接收欢迎消息:
+		print s.recv(1024)
+		for data in ['Michael', 'Tracy', 'Sarah']:
+		    # 发送数据:
+		    s.send(data)
+		    print s.recv(1024)
+		s.send('exit')
+		s.close()
+
+	print 'UDP: fast but unreliable'
+	if False:
+		s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+		s.bind(('127.0.0.1',9999))
+		print r"UDP server doesn't need listen"
+		print 'Bind UDP on 9999...'
+		while True: #server
+			data, addr = s.recvfrom(1024)
+			print 'Received from %s:%s.'%addr
+			s.sendto('Hello, %s!'%data,addr)
+
+		#client
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		for data in ['Michael', 'Tracy', 'Sarah']:
+		    # 发送数据:
+		    s.sendto(data, ('127.0.0.1', 9999))
+		    # 接收数据:
+		    print s.recv(1024)
+		s.close()
+
+a=raw_input('Need see send email module?(y/n): ')
+if a=='y':
+	print 'send by SMTP'
+	from email.mime.text import MIMEText
+	from email import encoders
+	from email.header import Header
+	from email.utils import parseaddr, formataddr
+	from email.mime.multipart import MIMEMultipart
+	from email.mime.base import MIMEBase
+	import base64, getpass
+	from_addr = raw_input('From: ')
+	password = getpass.getpass()#raw_input('Password: ')
+	smtp_server ='smtp.gmail.com'#raw_input('SMTP server:')
+	to_addr = raw_input('To: ')
+
+	def _format_addr(s):
+		name,addr = parseaddr(s)
+		return formataddr(( \
+			Header(name,'utf-8').encode(),\
+			addr.encode('utf-8') if isinstance(addr,unicode) else addr))
+
+	#msg = MIMEText('hello,send by Python...','plain','utf-8') #pure txt
+	msg = MIMEMultipart('alternative') # to attach file
+
+	msg['From'] = _format_addr(u'hao li <%s>'%from_addr)
+	msg['To'] = _format_addr(u'haoli <%s>'%to_addr)
+	msg['Subject']=Header(u'来自SMTP的问候...','utf-8').encode()	
+	#use the functions to encode chinese
+
+	#email body # use alternative in MIMEMultipart: if HTML cannot be received, show in plain text
+	msg.attach(MIMEText('send with file...','plain','utf-8'))
+
+	#if want embed pic into text, use HTML
+	msg.attach(MIMEText('<html><body><h1>Hello</h1>'+
+		'<p><img src="cid:0"></p>'+
+		'</body></html>','html','utf-8'))
+	with open('/Users/haoli/Downloads/OneDrive/Pictures/Saved pictures/IMG_1042_JPG.jpg','rb') as f:
+		#setup MIME and file name of attachment
+		mime = MIMEBase('image','png',filename='test.png')
+		#add necessary header information
+		mime.add_header('Content-Disposition','attachment',filename='test.png')
+		mime.add_header('Content-ID','<0>')
+		mime.add_header('X-Attachement-Id','0')
+		#read file
+		mime.set_payload(f.read())
+		#use Base64
+		encoders.encode_base64(mime)
+		#add to MIMEMultipart
+		msg.attach(mime)	
+
+	import smtplib
+	server = smtplib.SMTP(smtp_server,587)# default SMTP port 25; gmail: 587
+	server.starttls() # SSL safe connection
+	server.set_debuglevel(1)
+	server.login(from_addr,password)
+	server.sendmail(from_addr,[to_addr],msg.as_string())
+	server.quit()
+
+	#send information in HTML
+	msg = MIMEText('<html><body><h1>Hello</h1>'+
+		'<p>send by <a href="http://www.python.org">Python</a>...</p>'+
+		'</body></html>','html','utf-8') #send by Python with super-link to Python.org
+
+	print '\nPOP3 receive email:'
+	print '''step 1: download the encoded email
+	step 2: decode email to readable email'''
+a=raw_input('Need see receive email module?(y/n): ')
+if a=='y':	
+	import poplib, getpass
+	import email
+	from email.parser import Parser
+	from email.header import decode_header
+	from email.utils import parseaddr
+
+	# 输入邮件地址, 口令和POP3服务器地址:
+	email = raw_input('Email: ')
+	password = getpass.getpass()#raw_input('Password: ')
+	pop3_server = raw_input('POP3 server: ') #pop.gmail.com: 995
+
+	# 连接到POP3服务器:
+	server = poplib.POP3(pop3_server)
+	# 可以打开或关闭调试信息:
+	server.set_debuglevel(1)
+	# 可选:打印POP3服务器的欢迎文字:
+	print(server.getwelcome())
+	# 身份认证:
+	server.user(email)
+	server.pass_(password)
+	# stat()返回邮件数量和占用空间:
+	print('Messages: %s. Size: %s' % server.stat())
+	# list()返回所有邮件的编号:
+	resp, mails, octets = server.list()
+	# 可以查看返回的列表类似['1 82923', '2 2184', ...]
+	#print(mails)
+	# 获取最新一封邮件, 注意索引号从1开始:
+	index = len(mails)
+	resp, lines, octets = server.retr(index)
+	# lines存储了邮件的原始文本的每一行,
+	# 可以获得整个邮件的原始文本:
+	msg_content = '\r\n'.join(lines)
+	# 稍后解析出邮件:
+	msg = Parser().parsestr(msg_content)
+	# 可以根据邮件索引号直接从服务器删除邮件:
+	# server.dele(index)
+	# 关闭连接:
+	server.quit()
+
+	# decode email
+	# indent用于缩进显示:
+	def print_info(msg, indent=0):
+	    if indent == 0:
+	        # 邮件的From, To, Subject存在于根对象上:
+	        for header in ['From', 'To', 'Subject']:
+	            value = msg.get(header, '')
+	            if value:
+	                if header=='Subject':
+	                    # 需要解码Subject字符串:
+	                    value = decode_str(value)
+	                else:
+	                    # 需要解码Email地址:
+	                    hdr, addr = parseaddr(value)
+	                    name = decode_str(hdr)
+	                    value = u'%s <%s>' % (name, addr)
+	            print('%s%s: %s' % ('  ' * indent, header, value))
+	    if (msg.is_multipart()):
+	        # 如果邮件对象是一个MIMEMultipart,
+	        # get_payload()返回list，包含所有的子对象:
+	        parts = msg.get_payload()
+	        for n, part in enumerate(parts):
+	            print('%spart %s' % ('  ' * indent, n))
+	            print('%s--------------------' % ('  ' * indent))
+	            # 递归打印每一个子对象:
+	            print_info(part, indent + 1)
+	    else:
+	        # 邮件对象不是一个MIMEMultipart,
+	        # 就根据content_type判断:
+	        content_type = msg.get_content_type()
+	        if content_type=='text/plain' or content_type=='text/html':
+	            # 纯文本或HTML内容:
+	            content = msg.get_payload(decode=True)
+	            # 要检测文本编码:
+	            charset = guess_charset(msg)
+	            if charset:
+	                content = content.decode(charset)
+	            print('%sText: %s' % ('  ' * indent, content + '...'))
+	        else:
+	            # 不是文本,作为附件处理:
+	            print('%sAttachment: %s' % ('  ' * indent, content_type))
+	def decode_str(s):
+	    value, charset = decode_header(s)[0]
+	    if charset:
+	        value = value.decode(charset)
+	    return value
+
+	def guess_charset(msg):
+	    # 先从msg对象获取编码:
+	    charset = msg.get_charset()
+	    if charset is None:
+	        # 如果获取不到，再从Content-Type字段获取:
+	        content_type = msg.get('Content-Type', '').lower()
+	        pos = content_type.find('charset=')
+	        if pos >= 0:
+	            charset = content_type[pos + 8:].strip()
+	    return charset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
 
 
 
