@@ -1831,6 +1831,252 @@ if a=='y':
 	        if pos >= 0:
 	            charset = content_type[pos + 8:].strip()
 	    return charset
+a=raw_input('Need see sqlite3 module?(y/n): ')
+if a=='y':
+	print 'SQLLite: in python'
+	print 'Connection; Cursor;'
+	import sqlite3
+	conn = sqlite3.connect('test.db')
+	cursor = conn.cursor()#db cursor to execute db operation
+	#create a table with two columns
+	cursor.execute('create table user (id varchar(20) primary key, name varchar(20))')
+	#insert one line
+	cursor.execute('insert into user (id,name) values (\'1\',\'Michael\')')
+	print cursor.rowcount
+	cursor.execute('select * from user where id=?','1')
+	print cursor.fetchall()
+	#close db to prevent data leak
+	cursor.close()
+	conn.close()
+	print 'use try..catch..finally.. to ensure closure of db'
+	
+a=raw_input('Need see mysql module?(y/n): ')
+if a=='y':
+	print 'drive: mysql-connector-python; MySQL-python'
+	import mysql.connector
+	conn = mysql.connector.connect(user='root',password='zhenShen&Modou2bmysql',database='test',use_unicode=True)
+	cursor=conn.cursor()
+	#create user table
+	cursor.execute('create table user (id varchar(20) primary key, name varchar(20))')
+	cursor.execute('insert into user (id, name) values (%s, %s)', ['1', 'Michael'])
+	cursor.rowcount
+	#send
+	conn.commit()
+	cursor.close()
+	cursor = conn.cursor()
+	cursor.execute('select * from user where id = %s','1')
+	values = cursor.fetchall()
+	print values
+	cursor.close()
+	conn.close()
+	
+a=raw_input('Need see ORM-sqlalchemy module?(y/n): ')
+if a=='y':
+	#easy_install sqlalchemy
+	from sqlalchemy import Column, String, create_engine
+	from sqlalchemy.orm import sessionmaker
+	from sqlalchemy.ext.declarative import declarative_base
+	Base = declarative_base()
+	class User(Base):
+		__tablename__ = 'user'
+		id = Column(String(20), primary_key=True)
+		name = Column(String(20))
+	engine = create_engine('mysql+mysqlconnector://root:zhenShen&Modou2bmysql@localhost:3306/test')
+	DBSession = sessionmaker(bind=engine)
+	#create_engine()用来初始化数据库连接。SQLAlchemy用一个字符串表示连接信息：
+	#'数据库类型+数据库驱动名称://用户名:口令@机器地址:端口号/数据库名'
+
+	# 创建session对象:
+	session = DBSession()
+	# 创建新User对象:
+	new_user = User(id='5', name='Bob')
+	# 添加到session:
+	session.add(new_user)
+	# 提交即保存到数据库:
+	session.commit()
+	# 关闭session:
+	session.close()
+
+	#query
+	# 创建Session:
+	session = DBSession()
+	# 创建Query查询，filter是where条件，最后调用one()返回唯一行，如果调用all()则返回所有行:
+	user = session.query(User).filter(User.id=='5').one()
+	# 打印类型和对象的name属性:
+	print 'type:', type(user)
+	print 'name:', user.name
+	# 关闭Session:
+	session.close()
+
+	#由于关系数据库的多个表还可以用外键实现一对多、多对多等关联，相应地，ORM框架也可以提供两个对象之间的一对多、多对多等功能。
+	#例如，如果一个User拥有多个Book，就可以定义一对多关系如下：
+	if False:
+		class User(Base):
+		    __tablename__ = 'user'
+
+		    id = Column(String(20), primary_key=True)
+		    name = Column(String(20))
+		    # 一对多:
+		    books = relationship('Book')
+
+		class Book(Base):
+		    __tablename__ = 'book'
+
+		    id = Column(String(20), primary_key=True)
+		    name = Column(String(20))
+		    # “多”的一方的book表是通过外键关联到user表的:
+		    user_id = Column(String(20), ForeignKey('user.id'))
+
+a=raw_input('Need see Web module?(y/n): ')
+if a=='y':
+	print 'use WSGI server to decode HTTP request'
+
+	if False:
+
+		def application(environ, start_response):
+			#environ：一个包含所有HTTP请求信息的dict对象；start_response：一个发送HTTP响应的函数。
+			#provided by WSGI interface
+		    start_response('200 OK', [('Content-Type', 'text/html')])
+		    #start_response()函数接收两个参数，一个是HTTP响应码，一个是一组list表示的HTTP Header，每个Header用一个包含两个str的tuple表示。
+		    return '<h1>Hello, %s!</h1>' % (environ['PATH_INFO'][1:] or 'web')
+		    #return HTML page
+
+		from wsgiref.simple_server import make_server
+		# 导入我们自己编写的application函数:
+
+		# 创建一个服务器，IP地址为空，端口是8000，处理函数是application:
+		httpd = make_server('', 8000, application)
+		print "Serving HTTP on port 8000..."
+		# 开始监听HTTP请求:
+		httpd.serve_forever()
+
+	if False:
+		print 'flask Web Frame example: '
+		print 'In WSGI, we need to write a function for each URL path and request (different PATH_INFO, request [GET or POST])'
+		print 'Use Web frame to ease the problem: automatic match function with request by frame decorator'
+		from flask import Flask
+		from flask import request
+
+		app = Flask(__name__)
+
+		@app.route('/', methods=['GET', 'POST'])
+		def home():
+		    return '<h1>Home</h1>'
+		#HTTP: GET or POST / : return Home
+
+		@app.route('/signin', methods=['GET'])
+		def signin_form():
+		    return '''<form action="/signin" method="post">
+		              <p><input name="username"></p>
+		              <p><input name="password" type="password"></p>
+		              <p><button type="submit">Sign In</button></p>
+		              </form>'''
+		#HTTP: GET /singin : return signin form
+
+		@app.route('/signin', methods=['POST'])
+		def signin():
+		    # 需要从request对象读取表单内容：
+		    if request.form['username']=='admin' and request.form['password']=='password':
+		        return '<h3>Hello, admin!</h3>'
+		    return '<h3>Bad username or password.</h3>'
+		#HTTP: POST /singin : return signin
+
+		if __name__ == '__main__':
+		    app.run()
+
+	if False:
+		print '''Model-View-Controller，中文名“模型-视图-控制器”
+		Python处理URL的函数就是C：Controller，Controller负责业务逻辑，比如检查用户名是否存在，取出用户信息等等；
+		包含变量{{ name }}的模板就是V：View，View负责显示逻辑，通过简单地替换一些变量，View最终输出的就是用户看到的HTML。
+		MVC中的Model在哪？Model是用来传给View的，这样View在替换变量的时候，就可以从Model中取出相应的数据。
+		上面的例子中，Model就是一个dict：{ 'name': 'Michael' }'''
+
+		from flask import Flask, request, render_template
+
+		app = Flask(__name__)
+
+		@app.route('/', methods=['GET', 'POST'])
+		def home():
+		    return render_template('home.html') 
+		    #instead of returning HTML page, now returning rendered template
+
+		@app.route('/signin', methods=['GET'])
+		def signin_form():
+		    return render_template('form.html')
+
+		@app.route('/signin', methods=['POST'])
+		def signin():
+		    username = request.form['username']
+		    password = request.form['password']
+		    if username=='admin' and password=='password':
+		        return render_template('signin-ok.html', username=username)
+		    return render_template('form.html', message='Bad username or password', username=username)
+
+		print "在Jinja2模板中，我们用{{ name }}表示一个需要替换的变量。很多时候，还需要循环、条件判断等指令语句，在Jinja2中，用{% ... %}表示指令。"
+		print r'''{% for i in page_list %}
+    	<a href="/page/{{ i }}">{{ i }}</a>
+		{% endfor %}'''#assign hyperlink to each number in page_list
+		print '''\nMako：用<% ... %>和${xxx}的一个模板；
+		Cheetah：也是用<% ... %>和${xxx}的一个模板；
+		Django：Django是一站式框架，内置一个用{% ... %}和{{ xxx }}的模板。 
+		'''
+		if __name__ == '__main__':
+		    app.run()
+a=raw_input('Need see Gevent module?(y/n): ')
+if a=='y':
+
+	import time
+	def consumer():
+	    r = ''
+	    while True:
+	        n = yield r
+	        if not n:
+	            return
+	        print('[CONSUMER] Consuming %s...' % n)
+	        time.sleep(1)
+	        r = '200 OK'
+
+	def produce(c):
+	    c.next() #consumer stops at yield
+	    n = 0
+	    while n < 5:
+	        n = n + 1
+	        print('[PRODUCER] Producing %s...' % n)
+	        #jump to consumer; print in consumer, return r
+	        r = c.send(n)
+	        print('[PRODUCER] Consumer return: %s' % r)
+	    c.close()
+
+	if __name__=='__main__':
+	    c = consumer()
+	    produce(c)
+
+	print '\nuse gevent: jump when doing IO; save cpu time from waiting IO'
+	
+	
+	from gevent import monkey; monkey.patch_all()
+	import gevent
+	import urllib2
+
+	def f(url):
+	    print('GET: %s' % url)
+	    resp = urllib2.urlopen(url)
+	    data = resp.read()
+	    print('%d bytes received from %s.' % (len(data), url))
+
+	gevent.joinall([
+	        gevent.spawn(f, 'https://www.python.org/'),
+	        gevent.spawn(f, 'https://www.yahoo.com/'),
+	        gevent.spawn(f, 'https://github.com/'),
+	])
+
+
+
+
+
+
+
+
 
 
 
