@@ -76,7 +76,7 @@ git branch --set-upstream dev origin/dev :
 git pull : pull branch to local and merge with local branch
 		   if conlicted, solve manually
 		   success, then git push origin dev
-
+git push origin :dev : delete origin dev branch
 //git tag//
 git tag: show all tags
 		 v0.9 : tag 0.9 to HEAD

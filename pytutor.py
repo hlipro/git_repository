@@ -667,7 +667,7 @@ if a=='y':
 	class Dog(Mammal, RunnableMixin):
 		pass
 
-	print '\nspecial vars/funcs: __slots__,__len__(),__str__,__repr__'
+	print '\nspecial vars/funcs: __slots__,__len__(),__str__'
 	class Student(object):
 		def __init__(self,name=None):
 			self.__name = name
@@ -1374,6 +1374,7 @@ if a=='y':
 		     E.g., \ d {3} \ s + \ d {3,8} : '010   4567899'
 		[ ] : range of selections; e.g., [ 0 - 9 a - z A - Z \ _ ] for one number or alphabet or _
 			[ 0 - 9 a - z A - Z \ _ ] * for any number of chars selected from [ ]
+			[^ ] If the first character of the set is '^', all the characters that are not in the set will be matched. 
 		[ A | B] : A or B ; e.g., [ P | p ] ython : 'Python' or 'python'
 		^    : start of line ; ^ \ d : use number to start a line
 		$    : end of line ; \ d $ : use number to end a line
