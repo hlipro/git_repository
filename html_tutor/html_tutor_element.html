@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!-- HTML5 declarations -->
+<html lang="zh-Hans">
+<!-- language attribute: en-US, zh -->
+<head> 
+<!-- use lower case tags -->
+	<title>HTML Tutorial</title>
+	<meta charset="UTF-8" name="keywords" content="HTML elements tutorial" http-equiv="refresh">
+	<!-- head only contains meta data ; title may display in browser tab-->
+	<!-- metadata spefifies page description, keywords, author, las modified; can be used by browsers, search eingines(keywords) -->
+	<base href="http://www.w3schools.com/images/" target="_blank">
+	<!-- base spefifies the base URL for all relative URLs in a page -->
+	<style>
+	  body {background-color:lightgray;}
+	 /* h1   {color:blue}*/
+	  p    {
+	  		font-family:courier;
+	  		font-size:100%;
+	  		color:green;
+	  		border:1px solid black;
+	  		padding:10px;
+	  		margin:30px;} 
+	  		/*border is the box for paragraph
+	  		padding is the space between box and text
+	  		margin is the space outside box*/
+	  p#p01 {color:blue;}
+	  /*define style using item id to address single element*/
+	  p.poem {color:red;}
+	  /*define style using class to address groups of elements*/
+	  a:link    {color:#000000; background-color:transparent;}
+	a:visited {color:#000000; background-color:transparent;}
+	a:hover   {color:#ff0000; background-color:transparent;}
+	a:active  {color:#ff0000; background-color:transparent;}
+	/*style for links*/
+	img {width:200%;}
+	 /*style for img*/
+	 table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;}
+        /* two border collapse to one border*/
+	table {
+		border-spacing: 5px;}
+	th,td {
+	    padding: 15px;
+	    text-align: left;}
+
+	table#t01 {width: 100%;
+			background-color: #f1f1c1;}
+	table#t01 tr:nth-child(even) {
+    background-color: #eee;
+	}
+	table#t01 tr:nth-child(odd) {
+	    background-color: #fff;
+	}
+	table#t01 th {
+	    color: white;
+	    background-color: black;
+	}
+	/*style for table, table head (th), table box (td), and table with id=t01*/
+	ul {display: inline;}
+	/*style for unordered list*/
+	ul#menu {
+    padding: 0;
+	}
+	ul#menu li {
+	    display: inline;
+	}
+	ul#menu li a {
+	    background-color: black;
+	    color: white;
+	    padding: 10px 20px;
+	    text-decoration: none;
+	    border-radius: 4px 4px 0 0;
+	}
+	ul#menu li a:hover {
+	    background-color: orange;
+	}
+	/*style to create a menu*/
+	.cities{    background-color:black;
+			    color:white;
+			    margin:20px;
+			    padding:20px;}
+	span.red {color:red;}
+	</style>
+	<!-- <internal CSS> -->
+	
+	<!-- <link rel="stylesheet" href="styles.css"> -->
+	<!-- external CSS -->
+</head>
+<body>
+<!-- <body style="background-color:white"> -->
+<!-- styling: style="CSS property:CSS value" -->
+<h1 style="color:blue;font-family:verdana;font-size:300%;text-align:center">My first Heading</h1>
+<h2 style="color:red;font-family:courier;font-size:160%">This is second Heading</h2>
+<p id='p01' title=" sina 'web' ">My first <br>paragraph.</p>
+<!-- br in line means a new line -->
+<p class='poem'><b>This will <mark>display</mark> a poem:</b></p>
+<!-- <b> bold ; <i> italic ; <strong> strong bold text ; <em> emphasized ; <mark> highlightened ; <del> deleted 删除线 ； <ins> 下划线 ; <sub> 下标 ；<sup> 上标 -->
+<pre>
+	<q>moon light ahead of bed，
+	thought that was frost.</q>
+</pre>
+<!-- pre : pre-formatted text -->
+<!-- <q> : quotation -->
+<hr> 
+<p>Here is a quote from WWF's website:</p>
+<blockquote cite="http://www.worldwildlife.org/who/index.html">
+For 50 years, WWF has been protecting the future of nature.
+The world's leading conservation organization,
+WWF works in 100 countries and is supported by
+1.2 million members in the United States and
+close to 5 million globally.
+</blockquote>
+<!-- long quotation -->
+<hr>
+<p>To open a file, select:</p>
+<p><kbd>File | Open...</kbd></p>
+<!-- keyboard input formatting -->
+<samp>
+demo.example.com login: Apr 12 09:10:17
+Linux 2.6.10-grsec+gg3+e+fhs6b+nfs+gr0501+++p3+c4a+gr2b-reslog-v6.189
+</samp>
+<!-- Sample formatting -->
+<code>
+<pre>
+var person = {
+    firstName:"John",
+    lastName:"Doe",
+    age:50,
+    eyeColor:"blue"
+}
+</pre>
+</code>
+<!-- code formatting -->
+<p><var>E = m c<sup>2</sup></var></p>
+<!-- var formatting -->
+<hr>
+<!-- hr: horizontal line -->
+<a href="http://www.sina.com " target="_blank">Sina link<br></a>
+<!-- target = _blank: the link opens a new browser window or tab 
+			_self : opens in current tab; _parent: open in parent frame; _top: open in the full body of the window; framename: open in a named frame -->
+<!-- local link -->
+<a href="html_images.asp">HTML Images</a>
+<!-- Any number of spaces, and any number of new lines, count as only one space. -->
+
+<a id='tips'>Useful tips</a>
+<a href='#tips'>visit the Useful Tips Section</a>
+<!-- can use link id and href as bookmark -->
+<hr>
+<a href='default.asp'>
+<!-- can use image as links -->
+<img src="path/to/some.jpg" alt="alternative text" width="104" height="142">
+<!-- alternative text displays if image cannot show -->
+</a>
+<br/> 
+<!-- empty element -->
+<hr>
+<img src="planets.gif" alt="Planets" usemap="#planetmap" style="width:145px;height:126px">
+
+<map name="planetmap">
+  <area shape="rect" coords="0,0,82,126" alt="Sun" href="sun.htm">
+  <area shape="circle" coords="90,58,3" alt="Mercury" href="mercur.htm">
+  <area shape="circle" coords="124,58,8" alt="Venus" href="venus.htm">
+</map>
+<!-- create an image map with clickable areas -->
+<p>
+  <img src="smiley.gif" alt="Smiley face" style="float:left;width:42px;height:42px">
+  A paragraph with an image. The image floats to the left of the text.
+</p>
+<!-- image floating by style=float:left/right -->
+<hr>
+
+<table>
+<caption>a table</caption>
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>		
+    <th colspan="2">Points</th>
+  </tr>
+  <tr>
+    <th rowspan="2">alias</th>
+    <td>Smith</td>		
+    <td>50</td>
+    <td>30</td>
+  </tr>
+  <tr>
+  	 <td>Smith</td>		
+    <td>50</td>
+    <td>30</td>
+    </tr>
+</table>
+
+<br>
+
+<table id="t01">
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>		
+    <th>Points</th>
+  </tr>
+  <tr>
+    <td>Jill</td>
+    <td>Smith</td>		
+    <td>50</td>
+  </tr>
+  <tr>
+    <td>Eve</td>
+    <td>Jackson</td>		
+    <td>94</td>
+  </tr>
+  <tr>
+    <td>John</td>
+    <td>Doe</td>		
+    <td>80</td>
+  </tr>
+</table>
+<hr>
+<!-- lists -->
+<!-- unordered list : ul ; type: disc, circle, square, none -->
+<ul style="list-style-type:circle">
+  <li>Coffee</li>
+  <li>Tea
+  <li>Milk</li>
+</ul>
+<!-- ordered list : ol ; type: 1, A, a, I, i -->
+<ol type="i">
+  <li>Coffee</li>
+  <li>Tea
+  <li>Milk</li>
+</ol>
+<!-- Description list : dl , dt (term) , dd (data) -->
+<dl>
+  <dt>Coffee</dt>
+  <dd>- black hot drink</dd>
+  <dt>Milk</dt>
+  <dd>- white cold drink</dd>
+</dl>
+<!-- nested list -->
+<ul>
+  <li>Coffee</li>
+  <li>Tea
+    <ul>
+      <li>Black tea</li>
+      <li>Green tea</li>
+    </ul>
+  </li>
+  <li>Milk</li>
+</ul>
+<!-- define in styls="display:inline", we have horizontal list -->
+<h2>Horizontal List</h2>
+<!-- a list looks like a menu -->
+<ul id="menu">
+ <li><a href="html_tables.asp">Tables</a></li>
+ <li><a href="html_lists.asp">Lists</a></li>
+ <li><a href="html_blocks.asp">Blocks</a></li>
+ <li><a href="html_classes.asp">Classes</a></li>
+</ul>  
+
+<!-- div: block element as a container -->
+<div class="cities">
+<h3>My <span class="red">Important</span>Heading</h3>
+<!-- span is an inline container -->
+
+</div>
+<!-- 表单 -->
+<form>
+User name: <input type="text" name="username"><br>
+Password: <input type="password" name="pwd"><br>
+<input type="submit" value="Submit"><br>
+<!-- submit button -->
+Gender:<br>
+<input type="radio" name="sex" value="male">Male<br>
+<input type="radio" name="sex" value="female">Female<br>
+<!-- radio button for selection -->
+Checkbox:<br>
+<input type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+<input type="checkbox" name="vehicle" value="Car">I have a car <br>
+<!-- checkbox -->
+</form>
+
+<!-- Iframes : display a webpage within a webpage -->
+<iframe src="demo_iframe.htm" name="iframe_a" frameborder="0" width="200" height="200"></iframe>
+<p><a href="http://www.w3schools.com" target="iframe_a">W3Schools.com</a></p>
+<!-- click link and webpage show in iframe -->
+
+<!-- 17 html colors and 123 CSS colors -->
+<!-- http://www.w3schools.com/html/html_colornames.asp -->
+<!-- color value: 0xRRGGBB: RR 0-255 (0x00 - 0xFF) for red; same for GG green and BB blue ; We have 16 millions colors, at lease 16384 is supported for all monitors-->
+<!-- E.g. 0x000000 black ; 0xFFFFFF white -->
+
+<!-- javascript: image manipulation, form validation, and dynamic changes of content -->
+<!-- write Hello Javadcript into a paragraph with id demon -->
+<p id="demo"></p>
+<script>
+document.getElementById("demo").style.fontSize = "25px";
+document.getElementById("demo").innerHTML = "Hello JavaScript!";
+</script> 
+<noscript>Sorry, your browser does not support JavaScript!</noscript>
+<!-- browser without JS support will show contents in noscript -->
+
+<script>
+function light(sw) {
+    var pic;
+    if (sw == 0) {
+        pic = "pic_bulboff.gif"
+    } else {
+        pic = "pic_bulbon.gif"
+    }
+    document.getElementById('myImage').src = pic;
+}
+</script>
+
+<img id="myImage" src="pic_bulboff.gif" width="100" height="180">
+
+<p>
+<button type="button" onclick="light(1)">Light On</button>
+<button type="button" onclick="light(0)">Light Off</button>
+</p>
+<!-- a demon of JS with button to manipulate image -->
+
+<!-- HTML symbols: entities, mathmatical symbols... -->
+<!-- http://www.w3schools.com/html/html_entities.asp -->
+<!-- e.g., non breaking space: &nbsp; >: &gt -->
+
+
+</body>
+</html>>
