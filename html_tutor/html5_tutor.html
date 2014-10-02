@@ -1,1 +1,564 @@
- 
+ <!-- what's new -->
+ <!-- http://www.w3schools.com/html/html5_semantic_elements.asp
+ New semantic elements like <header>, <footer>, <article>, and <section>.
+New form controls like number, date, time, calendar, and range.
+New graphic elements: <svg> and <canvas>.
+New multimedia elements: <audio> and <video>. 
+New APIs : HTML Geolocation, HTML Drag and Drop, HTML Local Storage ,HTML Application Cache, HTML Web Workers, HTML SSE-->
+<!-- what's removed -->
+<!-- <acronym>
+<applet>
+<basefont>
+<big>
+<center>
+<dir>
+<font>
+<frame>
+<frameset>
+<noframes>
+<strike>
+<tt> -->
+<!DOCTYPE html>
+<html>
+	
+<head>
+  <title>Creating an HTML Element</title>
+  <script>document.createElement("myHero")</script>
+  <!-- you can add a new element by JS -->
+  <style>
+      myHero {
+        display:block;
+        background-color:#ddd;
+        padding: 50px;
+        font-size: 30px;
+      } 
+    header, section, footer, aside, nav, main, article, figure {
+    display: block; }
+    /*to secure these display correctly in old browsers*/
+  </style>
+</head>
+
+<body>
+
+<h1>My First Heading</h1>
+
+<p>My first paragraph.</p>
+
+<myHero>My First Hero</myHero>
+
+</body>
+</html>
+<!-- Internet Explorer 8 and earlier, does not allow styling of unknown elements. -->
+
+<!-- use shiv solution! -->
+
+<!-- below is a HTML5 skeleton -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>HTML5</title>
+<meta charset="utf-8">
+
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+</script>
+<![endif]-->
+
+<style>
+body {font-family: Verdana, sans-serif; font-size:0.8em;}
+header, nav, section, article, footer
+{border:1px solid grey; margin:5px; padding:8px;}
+nav ul {margin:0; padding:0;}
+nav ul li {display:inline; margin:5px;}
+</style>
+
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "#FF0000";
+ctx.fillRect(0,0,150,75);
+//fillRect: draw rect with left-upper cord (0,0) and 150 width 75 height
+ctx.moveTo(0,0);
+ctx.lineTo(200,100);
+ctx.stroke();
+// moveTo(x,y) :define starting point of a line ; lineTo(x,y) defines ending point of a line
+// stroke() means use pen to draw
+ctx.beginPath();
+ctx.arc(95,50,40,0,2*Math.PI);
+ctx.stroke();
+// arc(x,y,radius,start,stop) : draw an arc or circle or semicircle
+ctx.font = "30px Arial";
+ctx.fillText("Hello World",10,50);
+ctx.strokeText("Hello World",60,50);
+// fill or stroke text
+
+// Create gradient linear ; can have multiple color stops ; createLinearGradient(x,y,x1,y1)
+var grd = ctx.createLinearGradient(0,0,200,0);
+grd.addColorStop(0,"red");
+grd.addColorStop(1,"white");
+// Fill with gradient
+ctx.fillStyle = grd;
+ctx.fillRect(10,10,150,80);
+
+// Create radial gradient ; createRadialGradient(x,y,r,x1,y1,r1)
+var grd = ctx.createRadialGradient(75,50,5,90,60,100);
+grd.addColorStop(0,"red");
+grd.addColorStop(1,"white");
+// Fill with gradient
+ctx.fillStyle = grd;
+ctx.fillRect(10,10,150,80);
+
+// draw ima ; first get an img from somewhere
+var img = document.getElementById("scream");
+ctx.drawImage(img,10,10);
+
+</script>
+<!-- script for canvas -->
+</head>
+
+<body>
+
+<header>
+  <h1>HTML5 Skeleton</h1>
+</header>
+
+<nav>
+<ul>
+  <li><a href="html5_semantic_elements.asp">HTML5 Semantic</a></li>
+  <li><a href="html5_form_elements.asp">HTML5 Forms</a></li>
+  <li><a href="html5_canvas.asp">HTML5 Graphics</a></li>
+</ul>
+</nav>
+
+<article>
+
+<h1>Famous Cities</h1>
+
+<section>
+<h2>London</h2>
+<p>London is the capital city of England. It is the most populous city in the United Kingdom,
+with a metropolitan area of over 13 million inhabitants.</p>
+</section>
+
+<section>
+<h2>Paris</h2>
+<p>Paris is the capital and most populous city of France.</p>
+</section>
+
+<section>
+<h2>Tokyo</h2>
+<p>Tokyo is the capital of Japan, the center of the Greater Tokyo Area,
+and the most populous metropolitan area in the world.</p>
+</section>
+
+</article>
+
+<figure>
+  <img src="img_pulpit.jpg" alt="The Pulpit Rock" width="304" height="228">
+  <figcaption>Fig.1 - The Pulpit Rock, Norway.</figcaption>
+</figure>
+<!-- figure element -->
+
+<form action="demo_form.asp" method="get">
+
+<input list="browsers" name="browser">
+<!-- list attr used to embed a datalist for this input -->
+<datalist id="browsers">
+  <option value="Internet Explorer">
+  <option value="Firefox">
+  <option value="Chrome">
+  <option value="Opera">
+  <option value="Safari">
+</datalist>
+<!-- datalist show a list of options for autocomplete of input-->
+<input type="submit">
+</form>
+
+<form action="demo_keygen.asp" method="get">
+Username: <input type="text" name="usr_name">
+Encryption: <keygen name="security">
+<!-- keygen : generate a local key and a public key (sent to server) -->
+<input type="submit">
+<!-- submit button using input -->
+</form>
+
+<form action="demo_form.asp" method="get"
+oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+0
+<input type="range" id="a" name="a" value="50">
+<!-- 参数条 -->
+100 +
+<input type="number" id="b" name="b" value="50">
+=
+<output name="x" for="a b"></output>
+<!-- output can show some calculation results in this form-->
+<input type="submit">
+</form>
+
+<!-- new input types: color,date,datetime,datetime-local,email,month,number,range, search,tel,time,url,week -->
+<!-- input restrictions: disabled; max;maxlength;min;pattern (regular expression check);readonly(can not change);required(must be filled out);size;step(legal number intervals);value (default value) -->
+<form action="demo_form.asp" autocomplete＝"on" novalidate id＝"form1" method="post">
+<!-- new attr: autocomplete ; novalidate (no validate data input) -->
+  Quantity (between 1 and 5):
+  <input type="number" name="quantity" min="1" max="5" autofocus>
+  <!-- when the page loads, autofocus will allow the above input field to get focus -->
+  <input type="submit" value="Send"><br>
+  Quantity:
+  <input type="number" name="points" min="0" max="100" step="10" value="30"><br>
+  Enter a date before 1980-01-01:
+  <input type="date" name="bday" max="1979-12-31"><br>
+  Enter a date after 2000-01-01:
+  <input type="date" name="bday" min="2000-01-02"><br>
+  Select your favorite color:
+  <input type="color" name="favcolor"><br>
+  <input type="range" name="points" min="0" max="10"> <br>
+  Birthday (month and year):
+  <input type="month" name="bdaymonth"><br>
+  Select a week:
+  <input type="week" name="week_year"><br>
+  Select a time:
+  <input type="time" name="usr_time"><br>
+  Birthday (date and time):
+  <input type="datetime" name="bdaytime"><br>
+  <!-- datetime: not working -->
+ Birthday (date and time):
+  <input type="datetime-local" name="bdaytime"><br>
+  E-mail:
+  <input type="email" name="email"><br>
+  Search Google:
+  <input type="search" name="googlesearch"><br>
+  Telephone:
+  <input type="tel" name="usrtel"><br>
+  Add your homepage:
+  <input type="url" name="homepage"><br>
+  
+  <input type="submit" formaction="demo_admin.asp"
+  value="Submit as admin"><br>
+ <!--  The formaction attribute specifies the URL of a file that will process the input control when the form is submitted. 
+ The formaction attribute overrides the action attribute of the <form> element.
+ used with type="submit" and type="image". -->
+  
+  <input type="submit" formenctype="multipart/form-data"
+  value="Submit as Multipart/form-data"><br>
+<!-- The formenctype attribute specifies how the form-data should be encoded when submitting it to the server (only for forms with method="post")
+The formenctype attribute overrides the enctype attribute of the <form> element.
+The formenctype attribute is used with type="submit" and type="image". -->
+
+ <input type="submit" formmethod="post" formaction="demo_post.asp"
+  value="Submit using POST"><br>
+<!--   The formmethod attribute defines the HTTP method for sending form-data to the action URL.The formmethod attribute overrides the method attribute of the <form> element.The formmethod attribute can be used with type="submit" and type="image". -->
+
+<input type="submit" formnovalidate value="Submit without validation"><br>
+<!-- When present, it specifies that the <input> element should not be validated when submitted. The formnovalidate attribute overrides the novalidate attribute of the <form> element. The formnovalidate attribute can be used with type="submit". -->
+
+ <input type="submit" formtarget="_blank"
+  value="Submit to a new window"><br>
+ <!--  The formtarget attribute specifies a name or a keyword that indicates where to display the response that is received after submitting the form.
+The formtarget attribute overrides the target attribute of the <form> element.
+The formtarget attribute can be used with type="submit" and type="image". -->
+
+<input type="image" src="img_submit.gif" alt="Submit" width="48" height="48"><br>
+<!-- use input type image and alt=submit to build a submit button; have width and height attr -->
+
+<input type="file" name="img" multiple><br>
+<!-- file type input ; multiple means can choose many inputs, multiple works for file and image types -->
+
+Country code: <input type="text" name="country_code" pattern="[A-Za-z]{3}" title="Three letter country code"><br>
+<!-- pattern use regualr expression for check ; for text, search, url, tel, email, and password types  -->
+
+<input type="text" name="fname" placeholder="First name"><br>
+<!-- placeholder puts a hint in input field before entering. for text, search, url, tel, email, and password -->
+
+Username: <input type="text" name="usrname" required><br>
+<!-- required : must fill in ; for text, search, url, tel, email, password, date pickers, number, checkbox, radio, and file -->
+
+<input type="number" name="points" step="3"><br>
+<!-- step attribute specifies the legal number intervals for an <input> element.
+for number, range, date, datetime, datetime-local, month, time and week -->
+
+</form>
+
+Last Name: <input type="text" name="lname" form="form1"><br>
+<!-- by assigning a form id , we can have input field outside form field -->
+
+<!-- A canvas is a rectangular area on an HTML page, and it is specified with the <canvas> element. always assign id for Javascript -->
+<canvas id="myCanvas" width="200" height="100"
+style="border:1px solid #000000;">
+</canvas>
+
+<!-- SVG: scalable vector graphics ; tutor : http://www.w3schools.com/svg/default.asp -->
+<svg width="300" height="200">
+  <polygon points="100,10 40,198 190,78 10,78 160,198"
+  style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd;" />
+</svg>
+
+<!-- video : use mp4-->
+<video width="320" height="240" controls>
+<!-- video properties: autoplay / controls -->
+  <source src="movie.mp4" type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+  Your browser does not support the video tag.
+</video>
+
+<!-- video functions and javascripts -->
+<div style="text-align:center"> 
+  <button onclick="playPause()">Play/Pause</button> 
+  <button onclick="makeBig()">Big</button>
+  <button onclick="makeSmall()">Small</button>
+  <button onclick="makeNormal()">Normal</button>
+  <br> 
+  <video id="video1" width="420">
+    <source src="mov_bbb.mp4" type="video/mp4">
+    <source src="mov_bbb.ogg" type="video/ogg">
+    Your browser does not support HTML5 video.
+  </video>
+</div> 
+<script> 
+var myVideo = document.getElementById("video1"); 
+
+function playPause() { 
+    if (myVideo.paused) 
+        myVideo.play(); 
+    else 
+        myVideo.pause(); 
+} 
+
+function makeBig() { 
+    myVideo.width = 560; 
+} 
+
+function makeSmall() { 
+    myVideo.width = 320; 
+} 
+
+function makeNormal() { 
+    myVideo.width = 420; 
+} 
+</script> 
+
+<!-- audio : use mp3 -->
+<audio controls>
+  <source src="horse.ogg" type="audio/ogg">
+  <source src="horse.mp3" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<!-- object : to embed plug-ins, like html, java applets, pdf reader, flash , image ... -->
+<object width="400" height="50" data="bookmark.swf"></object>
+<object width="100%" height="500px" data="snippet.html"></object>
+<object data="audi.jpeg"></object>
+
+<!-- embed : defines an embedded object within an HTML document -->
+<embed width="400" height="50" src="bookmark.swf">
+<embed width="100%" height="500px" src="snippet.html">
+<embed src="audi.jpeg">
+
+<!-- Youtube : upload a video onto youtube, and insert html code in your web page ; can use iframe, object or embed -->
+<iframe width="420" height="315"
+src="http://www.youtube.com/embed/XGSy3_Czz8k">
+</iframe>
+<object width="420" height="315"
+data="http://www.youtube.com/v/XGSy3_Czz8k">
+</object>
+<embed width="420" height="315"
+src="http://www.youtube.com/v/XGSy3_Czz8k">
+
+<!-- HTML geolocation : get the user's current location-->
+<!-- navigator.geolocation.getCurrentPosition(func1,func2) -->
+<!-- if get the location, getCurrentPosition returns an posiiton object to func1 -->
+<!-- if failed, it returns an error object to funct -->
+<!-- The position object has properties:
+coords.latitude	 - The latitude as a decimal number
+coords.longitude - The longitude as a decimal number
+coords.accuracy	 - The accuracy of position
+coords.altitude	 - The altitude in meters above the mean sea level
+coords.altitudeAccuracy	- The altitude accuracy of position
+coords.heading   - The heading as degrees clockwise from North
+coords.speed	 - The speed in meters per second
+timestamp	     - The date/time of the response -->
+<!-- navigator.geolocation.watchPosition() - Returns the current position of the user and continues to return updated position as the user moves (like the GPS in a car). -->
+<!-- clearWatch() - Stops the watchPosition() method. -->
+<p id="demo">Click the button to get your position:</p>
+<button onclick="getLocation()">Try It</button>
+<div id="mapholder"></div>
+<script>
+var x = document.getElementById("demo");
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+	// show position using google maps
+    var latlon = position.coords.latitude+","+position.coords.longitude;
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+    // use a div with id=mapholder to show HTML <img src ="...">
+}
+function showError(error) {
+	// handling errors ; second parameter of getCurrentPosition()
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+</script>
+
+<!-- drag and drop ：use ondragstart="drag(event)", ondrop="drop(event)"-->
+<style>
+#div1 {width:350px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+</style>
+<script>
+function allowDrop(ev) {
+    ev.preventDefault();}
+function drag(ev) {
+    ev.dataTransfer.setData("text/html", ev.target.id);}
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text/html");
+    ev.target.appendChild(document.getElementById(data));}
+</script>
+<p>Drag the W3Schools image into the rectangle:</p>
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<br>
+<img id="drag1" src="img_logo.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
+<!-- make img draggable by setting draggable="true" -->
+
+<!-- local storage -->
+<script>
+// Check browser support
+if (typeof(Storage) != "undefined") {
+    // Store
+    localStorage.setItem("lastname", "Smith");
+    // Retrieve
+    document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+    // remove
+    localStorage.removeItem("lastname");
+} else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+}
+</script>
+
+<!-- use localStorage to count ; close the browser, the localstorage will reset-->
+<script>
+function clickCounter() {
+    if(typeof(Storage) !== "undefined") {
+        if (localStorage.clickcount) {
+            localStorage.clickcount = Number(localStorage.clickcount)+1;
+        } else {
+            localStorage.clickcount = 1;
+        }
+        document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+    }
+}
+</script>
+
+<p><button onclick="clickCounter()" type="button">Click me!</button></p>
+<div id="result"></div>
+<p>Click the button to see the counter increase.</p>
+<p>Close the browser tab (or window), and try again, and the counter will continue to count (is not reset).</p>
+
+<!-- HTML5 introduces application cache, which means that a web application is cached, and accessible without an internet connection. -->
+<!-- To enable application cache, include the manifest attribute in the document's <html> tag: -->
+<!-- <!DOCTYPE HTML>
+<html manifest="demo.appcache">
+...
+</html> -->
+<!-- A manifest file needs to be served with the correct media type, which is "text/cache-manifest". Must be configured on the web server. the recommended file extension for manifest files is: ".appcache" -->
+<!-- The manifest file has three sections:
+CACHE MANIFEST - Files listed under this header will be cached after they are downloaded for the first time
+NETWORK - Files listed under this header require a connection to the server, and will never be cached
+FALLBACK - Files listed under this header specifies fallback pages if a page is inaccessible -->
+<!-- for example -->
+<!-- 
+CACHE MANIFEST
+# 2012-02-21 v1.0.0
+/theme.css
+/logo.gif
+/main.js
+
+NETWORK:
+login.asp (or *  - [all the other files])
+
+FALLBACK:
+/html/ /offline.html -->
+
+<!-- web worker : JavaScript running in the background, without affecting the performance of the page -->
+<p>Count numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button> 
+<button onclick="stopWorker()">Stop Worker</button>
+<br><br>
+<script>
+var w;
+function startWorker() {
+    if(typeof(Worker) !== "undefined") {
+        if(typeof(w) == "undefined") {
+            w = new Worker("demo_workers.js");}//start the worker to run demo_workers.js
+        w.onmessage = function(event) {
+            document.getElementById("result").innerHTML = event.data;};
+            //if receive an event, post the data 
+    } else {
+        document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";}}
+function stopWorker() { 
+    w.terminate();
+    w = undefined;}
+</script>
+<!-- create a "demo_workers.js like this" -->
+<!-- var i = 0;
+function timedCount() {
+    i = i + 1;
+    postMessage(i);
+    setTimeout("timedCount()",500);}
+timedCount();
+ -->
+
+<!-- A server-sent event is when a web page automatically gets updates from a server. -->
+<!-- Examples: Facebook/Twitter updates, stock price updates, news feeds, sport results, etc. -->
+<h1>Getting server updates</h1>
+<div id="result"></div>
+<script>
+if(typeof(EventSource) !== "undefined") {
+    var source = new EventSource("demo_sse.php"); //will receive demo_sse.php
+    source.onmessage = function(event) {
+        document.getElementById("result").innerHTML += event.data + "<br>";};
+        // 
+} else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";}
+</script>
+<!-- code in demo_sse.php 
+<?php
+// header('Content-Type: text/event-stream');
+// header('Cache-Control: no-cache');
+
+// $time = date('r');
+// echo "data: The server time is: {$time}\n\n";
+// flush();
+?>
+-->
+<!-- python:http://flask.pocoo.org/snippets/116/ 
+explanation: /subcribe : if one user logon to homepage, generate a gevent queue, run generator gen() to get data from queue, and send the encoded data to a div 
+/publish : for every gevent queue, send the server time-->
+
+
+<footer>
+<p>&copy; 2014 W3Schools. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+
+
